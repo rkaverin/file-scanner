@@ -1,0 +1,100 @@
+[
+{
+  "name":"boolean",
+  "allDeclaredFields":true
+},
+{
+  "name":"com.beust.jcommander.converters.BooleanConverter",
+  "allDeclaredConstructors":true
+},
+{
+  "name":"com.beust.jcommander.converters.IntegerConverter",
+  "allDeclaredConstructors":true
+},
+{
+  "name":"com.beust.jcommander.validators.NoValidator",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.beust.jcommander.validators.NoValueValidator",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.github.rkaverin.AbsolutePathConverter",
+  "allDeclaredConstructors":true
+},
+{
+  "name":"com.github.rkaverin.BasePathConverter",
+  "allDeclaredConstructors":true
+},
+{
+  "name":"com.github.rkaverin.commands.AbstractBaseCommand",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"com.github.rkaverin.commands.AbstractCommand",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"com.github.rkaverin.commands.AbstractDirCommand",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"com.github.rkaverin.commands.AbstractThreadedCommand",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"com.github.rkaverin.commands.AddCommand",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"com.github.rkaverin.commands.Command",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"com.github.rkaverin.commands.FindDuplicatesCommand",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"com.github.rkaverin.commands.ListCommand",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"com.github.rkaverin.commands.PurgeCommand",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"com.github.rkaverin.commands.RemoveCommand",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"com.github.rkaverin.commands.UpdateCommand",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"int",
+  "allDeclaredFields":true
+},
+{
+  "name":"java.nio.file.Path",
+  "allDeclaredFields":true
+},
+{
+  "name":"java.security.MessageDigestSpi"
+},
+{
+  "name":"sun.security.provider.SHA",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+}
+]

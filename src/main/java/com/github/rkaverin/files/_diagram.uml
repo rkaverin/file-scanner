@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="0.0" y="461.0">com.github.rkaverin.files.HashCalculator</node>
+    <node x="612.0" y="0.0">com.github.rkaverin.files.FileEntry</node>
+    <node x="0.0" y="0.0">com.github.rkaverin.files.FileBase</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="0.9999999999999997" x="431.0" y="266.5000000000001" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

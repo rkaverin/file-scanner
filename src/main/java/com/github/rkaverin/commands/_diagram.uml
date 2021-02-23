@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="508.75" y="186.0">com.github.rkaverin.commands.AbstractBaseCommand</node>
+    <node x="671.25" y="0.0">com.github.rkaverin.commands.Command</node>
+    <node x="660.25" y="106.0">com.github.rkaverin.commands.AbstractCommand</node>
+    <node x="446.93750000000006" y="544.0">com.github.rkaverin.commands.RemoveCommand</node>
+    <node x="0.0" y="722.5">com.github.rkaverin.commands.UpdateCommand</node>
+    <node x="561.75" y="389.5">com.github.rkaverin.commands.PurgeCommand</node>
+    <node x="172.0" y="674.0">com.github.rkaverin.commands.FindDuplicatesCommand</node>
+    <node x="727.75" y="341.0">com.github.rkaverin.commands.ListCommand</node>
+    <node x="194.93750000000006" y="556.0">com.github.rkaverin.commands.AbstractThreadedCommand</node>
+    <node x="473.0" y="710.5">com.github.rkaverin.commands.AddCommand</node>
+    <node x="349.75" y="389.5">com.github.rkaverin.commands.AbstractDirCommand</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.github.rkaverin.commands.AbstractDirCommand" target="com.github.rkaverin.commands.AbstractBaseCommand">
+      <point x="0.0" y="-28.0" />
+      <point x="445.75" y="316.0" />
+      <point x="550.75" y="316.0" />
+      <point x="-84.0" y="52.5" />
+    </edge>
+    <edge source="com.github.rkaverin.commands.FindDuplicatesCommand" target="com.github.rkaverin.commands.AbstractThreadedCommand">
+      <point x="0.0" y="-76.5" />
+      <point x="312.5" y="649.0" />
+      <point x="310.93750000000006" y="649.0" />
+      <point x="0.0" y="28.0" />
+    </edge>
+    <edge source="com.github.rkaverin.commands.PurgeCommand" target="com.github.rkaverin.commands.AbstractBaseCommand">
+      <point x="0.0" y="-28.0" />
+      <point x="0.0" y="52.5" />
+    </edge>
+    <edge source="com.github.rkaverin.commands.ListCommand" target="com.github.rkaverin.commands.AbstractBaseCommand">
+      <point x="0.0" y="-76.5" />
+      <point x="864.25" y="316.0" />
+      <point x="718.75" y="316.0" />
+      <point x="84.0" y="52.5" />
+    </edge>
+    <edge source="com.github.rkaverin.commands.AbstractThreadedCommand" target="com.github.rkaverin.commands.AbstractDirCommand">
+      <point x="0.0" y="-28.0" />
+      <point x="310.93750000000006" y="519.0" />
+      <point x="397.75" y="519.0" />
+      <point x="-48.0" y="28.0" />
+    </edge>
+    <edge source="com.github.rkaverin.commands.RemoveCommand" target="com.github.rkaverin.commands.AbstractDirCommand">
+      <point x="0.0" y="-40.0" />
+      <point x="577.4375" y="519.0" />
+      <point x="493.75" y="519.0" />
+      <point x="48.0" y="28.0" />
+    </edge>
+    <edge source="com.github.rkaverin.commands.UpdateCommand" target="com.github.rkaverin.commands.AbstractThreadedCommand">
+      <point x="0.0" y="-28.0" />
+      <point x="76.0" y="649.0" />
+      <point x="233.60416666666674" y="649.0" />
+      <point x="-77.33333333333331" y="28.0" />
+    </edge>
+    <edge source="com.github.rkaverin.commands.AbstractCommand" target="com.github.rkaverin.commands.Command">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="28.0" />
+    </edge>
+    <edge source="com.github.rkaverin.commands.AddCommand" target="com.github.rkaverin.commands.AbstractThreadedCommand">
+      <point x="0.0" y="-40.0" />
+      <point x="590.5" y="649.0" />
+      <point x="388.2708333333333" y="649.0" />
+      <point x="77.33333333333326" y="28.0" />
+    </edge>
+    <edge source="com.github.rkaverin.commands.AbstractBaseCommand" target="com.github.rkaverin.commands.AbstractCommand">
+      <point x="0.0" y="-52.5" />
+      <point x="634.75" y="161.0" />
+      <point x="702.25" y="161.0" />
+      <point x="-42.0" y="15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.8400447427293065" x="874.0" y="294.3861517976032" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
