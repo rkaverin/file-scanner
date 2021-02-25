@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="182.0" y="942.5">com.github.rkaverin.console.AddCommand</node>
+    <node x="273.4090909090909" y="584.5">com.github.rkaverin.console.AbstractDirCommand</node>
+    <node x="349.0" y="894.0">com.github.rkaverin.console.FindDuplicatesCommand</node>
+    <node x="485.4090909090909" y="560.0">com.github.rkaverin.console.ListCommand</node>
+    <node x="142.7727272727273" y="715.0">com.github.rkaverin.console.AbstractThreadedCommand</node>
+    <node x="526.0" y="106.0">com.github.rkaverin.console.AbstractCommand</node>
+    <node x="0.0" y="930.0">com.github.rkaverin.console.UpdateCommand</node>
+    <node x="778.409090909091" y="584.5">com.github.rkaverin.console.PurgeCommand</node>
+    <node x="468.0" y="309.0">com.github.rkaverin.console.AbstractBaseCommand</node>
+    <node x="541.0" y="0.0">com.github.rkaverin.console.Command</node>
+    <node x="970.409090909091" y="0.0">com.github.rkaverin.console.CommandException</node>
+    <node x="394.77272727272725" y="751.5">com.github.rkaverin.console.RemoveCommand</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.github.rkaverin.console.AbstractBaseCommand" target="com.github.rkaverin.console.AbstractCommand">
+      <point x="0.0" y="-100.5" />
+      <point x="0.0" y="76.5" />
+    </edge>
+    <edge source="com.github.rkaverin.console.ListCommand" target="com.github.rkaverin.console.AbstractBaseCommand">
+      <point x="0.0" y="-52.5" />
+      <point x="621.9090909090909" y="535.0" />
+      <point x="614.0" y="535.0" />
+      <point x="0.0" y="100.5" />
+    </edge>
+    <edge source="com.github.rkaverin.console.PurgeCommand" target="com.github.rkaverin.console.AbstractBaseCommand">
+      <point x="0.0" y="-28.0" />
+      <point x="851.909090909091" y="535.0" />
+      <point x="711.3333333333333" y="535.0" />
+      <point x="97.33333333333326" y="100.5" />
+    </edge>
+    <edge source="com.github.rkaverin.console.RemoveCommand" target="com.github.rkaverin.console.AbstractDirCommand">
+      <point x="0.0" y="-28.0" />
+      <point x="470.77272727272725" y="690.0" />
+      <point x="417.4090909090909" y="690.0" />
+      <point x="48.0" y="28.0" />
+    </edge>
+    <edge source="com.github.rkaverin.console.FindDuplicatesCommand" target="com.github.rkaverin.console.AbstractThreadedCommand">
+      <point x="0.0" y="-76.5" />
+      <point x="489.5" y="869.0" />
+      <point x="336.1060606060606" y="869.0" />
+      <point x="77.33333333333331" y="64.5" />
+    </edge>
+    <edge source="com.github.rkaverin.console.AbstractCommand" target="com.github.rkaverin.console.Command">
+      <point x="0.0" y="-76.5" />
+      <point x="0.0" y="28.0" />
+    </edge>
+    <edge source="com.github.rkaverin.console.AbstractDirCommand" target="com.github.rkaverin.console.AbstractBaseCommand">
+      <point x="0.0" y="-28.0" />
+      <point x="369.4090909090909" y="535.0" />
+      <point x="516.6666666666666" y="535.0" />
+      <point x="-97.33333333333337" y="100.5" />
+    </edge>
+    <edge source="com.github.rkaverin.console.UpdateCommand" target="com.github.rkaverin.console.AbstractThreadedCommand">
+      <point x="0.0" y="-40.5" />
+      <point x="81.0" y="869.0" />
+      <point x="181.439393939394" y="869.0" />
+      <point x="-77.33333333333333" y="64.5" />
+    </edge>
+    <edge source="com.github.rkaverin.console.AddCommand" target="com.github.rkaverin.console.AbstractThreadedCommand">
+      <point x="0.0" y="-28.0" />
+      <point x="255.5" y="869.0" />
+      <point x="258.7727272727273" y="869.0" />
+      <point x="-1.4210854715202004E-14" y="64.5" />
+    </edge>
+    <edge source="com.github.rkaverin.console.AbstractThreadedCommand" target="com.github.rkaverin.console.AbstractDirCommand">
+      <point x="0.0" y="-64.5" />
+      <point x="258.7727272727273" y="690.0" />
+      <point x="321.4090909090909" y="690.0" />
+      <point x="-48.0" y="28.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.8400447427293065" x="874.0" y="294.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

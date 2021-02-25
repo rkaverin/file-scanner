@@ -1,4 +1,4 @@
-package com.github.rkaverin.commands;
+package com.github.rkaverin.console;
 
 import com.beust.jcommander.Parameters;
 
@@ -6,7 +6,7 @@ import com.beust.jcommander.Parameters;
 public final class PurgeCommand extends AbstractBaseCommand {
 
     @Override
-    public void doWork() throws CommandException {
+    protected void doWork() throws CommandException {
         base.purge();
     }
 }

@@ -1,4 +1,4 @@
-package com.github.rkaverin.commands;
+package com.github.rkaverin.console;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -10,7 +10,7 @@ public final class ListCommand extends AbstractBaseCommand {
     boolean listLongInfo = false;
 
     @Override
-    public void doWork() throws CommandException {
+    protected void doWork() throws CommandException {
         if (listLongInfo) {
             String format = "%-55s%10s%15s%n";
             System.out.printf(format, "Dir", "files", "Size");

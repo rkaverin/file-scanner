@@ -2,11 +2,16 @@ package com.github.rkaverin;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
-import com.github.rkaverin.commands.*;
+import com.github.rkaverin.console.*;
 
 public class Main {
 
     public static void main(String[] args) {
+
+        if (args.length == 0) {
+            MainFX.main(args);
+            return;
+        }
 
         JCommander jc = JCommander.newBuilder()
                 .programName("file-scanner")
@@ -17,7 +22,7 @@ public class Main {
                         return "1";
                     }
                     if ("-b".equals(optionName) || "--base".equals(optionName)) {
-                        return "default.z";
+                        return "default";
                     }
                     return null;
                 })

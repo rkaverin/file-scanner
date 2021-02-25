@@ -1,8 +1,8 @@
-package com.github.rkaverin.commands;
+package com.github.rkaverin.console;
 
 import com.beust.jcommander.Parameter;
 import com.github.rkaverin.BasePathConverter;
-import com.github.rkaverin.files.FileBase;
+import com.github.rkaverin.model.FileBase;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,7 +11,7 @@ import java.nio.file.Path;
 public abstract class AbstractBaseCommand extends AbstractCommand {
 
     @Parameter(names = {"-b", "--base"}, description = "file to store calculated hash", converter = BasePathConverter.class)
-    protected Path basePath; //TODO: переделать в FileBase base
+    protected Path basePath;
 
     protected FileBase base;
 
@@ -37,7 +37,7 @@ public abstract class AbstractBaseCommand extends AbstractCommand {
                 if (isVerbose) {
                     System.out.printf("Loaded %d file hashes%n", result.getFilesCount());
                 }
-            } catch (IOException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 throw new CommandException(e);
             }
         }
@@ -46,13 +46,15 @@ public abstract class AbstractBaseCommand extends AbstractCommand {
     }
 
     protected void saveBase(FileBase fileBase, Path path) throws CommandException {
-        try {
-            fileBase.save(path);
-        } catch (IOException e) {
-            throw new CommandException(e);
-        }
-        if (isVerbose) {
-            System.out.printf("Base saved to %s%n", path);
+        if (fileBase.isModified()) {
+            try {
+                fileBase.save(path);
+            } catch (IOException e) {
+                throw new CommandException(e);
+            }
+            if (isVerbose) {
+                System.out.printf("Base saved to %s%n", path);
+            }
         }
     }
 

@@ -1,8 +1,7 @@
-package com.github.rkaverin.commands;
+package com.github.rkaverin.console;
 
 import com.beust.jcommander.Parameter;
 
-//TODO: изменить иерархию классов так, чтобы конкретные команды наследовали только нужные опции
 public abstract class AbstractCommand implements Command {
 
     @Parameter(names = {"-v", "--verbose"}, description = "verbose output")

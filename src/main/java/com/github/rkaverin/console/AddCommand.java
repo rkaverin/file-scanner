@@ -1,4 +1,4 @@
-package com.github.rkaverin.commands;
+package com.github.rkaverin.console;
 
 import com.beust.jcommander.Parameters;
 
@@ -8,7 +8,7 @@ import java.io.IOException;
 public final class AddCommand extends AbstractThreadedCommand {
 
     @Override
-    public void doWork() throws CommandException {
+    protected void doWork() throws CommandException {
         if (isVerbose) {
             System.out.printf("Add dir: %s%n", dirPath);
         }

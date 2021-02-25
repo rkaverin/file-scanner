@@ -1,4 +1,4 @@
-package com.github.rkaverin.files;
+package com.github.rkaverin.model;
 
 import java.time.Instant;
 import java.util.ArrayList;

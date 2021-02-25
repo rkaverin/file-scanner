@@ -1,4 +1,4 @@
-package com.github.rkaverin.files;
+package com.github.rkaverin.model;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,6 +11,7 @@ public class HashCalculator {
     private final Map<FileEntry, Future<?>> entries = new HashMap<>();
     private final ExecutorService executor;
     private final SimpleTimer timer = new SimpleTimer(false);
+    private final SimpleETA eta = new SimpleETA();
 
     public HashCalculator(ExecutorService executor) {
         this.executor = executor;
@@ -29,11 +30,13 @@ public class HashCalculator {
                 .parallel()
                 .forEach(entry -> entry.setValue(executor.submit(() -> entry.getKey().calcHash())));
         timer.start();
+        eta.addProgress(0d);
     }
 
     public void awaitCalculation(Runnable progressBarCallback) throws InterruptedException {
         while (!entries.values().stream().allMatch(Future::isDone)) {
             TimeUnit.MILLISECONDS.sleep(300);
+            eta.addProgress(getProgress());
             progressBarCallback.run();
         }
         timer.stop();
@@ -57,7 +60,8 @@ public class HashCalculator {
     }
 
     public double getETA() {
-        return (getTotalByteCount() * 1.0 / getProcessedByteCount() - 1) * getScanTime();
+//        return (getTotalByteCount() * 1.0 / getProcessedByteCount() - 1) * getScanTime();
+        return eta.getETA();
     }
 
     public double getScanTime() {

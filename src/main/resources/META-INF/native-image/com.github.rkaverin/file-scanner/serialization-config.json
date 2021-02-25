@@ -1,2 +1,29 @@
 [
+  {
+  "name":"com.github.rkaverin.model.FileEntry"
+  },
+  {
+  "name":"java.lang.Long"
+  },
+  {
+  "name":"java.lang.String"
+  },
+  {
+  "name":"java.lang.Number"
+  },
+  {
+  "name":"java.time.Instant"
+  },
+  {
+  "name":"java.lang.Integer"
+  },
+  {
+  "name":"java.time.Ser"
+  },
+  {
+  "name":"com.github.rkaverin.model.FileBase"
+  },
+  {
+  "name":"java.util.ArrayList"
+  }
 ]

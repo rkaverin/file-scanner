@@ -1,4 +1,4 @@
-package com.github.rkaverin.commands;
+package com.github.rkaverin.console;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -12,7 +12,7 @@ public final class UpdateCommand extends AbstractThreadedCommand {
     boolean fullscan = false;
 
     @Override
-    public void doWork() throws CommandException {
+    protected void doWork() throws CommandException {
         try {
             base.update(
                     dirPath,

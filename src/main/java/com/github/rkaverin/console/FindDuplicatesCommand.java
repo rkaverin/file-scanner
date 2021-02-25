@@ -1,4 +1,4 @@
-package com.github.rkaverin.commands;
+package com.github.rkaverin.console;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -22,7 +22,7 @@ public final class FindDuplicatesCommand extends AbstractThreadedCommand {
     private final Map<Path, List<Path>> duplicates = new HashMap<>();
 
     @Override
-    public void doWork() throws CommandException {
+    protected void doWork() throws CommandException {
         try {
             base.duplicates(
                     dirPath,

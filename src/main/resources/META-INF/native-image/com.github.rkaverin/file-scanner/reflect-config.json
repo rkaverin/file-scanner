@@ -28,63 +28,71 @@
   "allDeclaredConstructors":true
 },
 {
-  "name":"com.github.rkaverin.commands.AbstractBaseCommand",
+  "name":"com.github.rkaverin.console.AbstractBaseCommand",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
 },
 {
-  "name":"com.github.rkaverin.commands.AbstractCommand",
+  "name":"com.github.rkaverin.console.AbstractCommand",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
 },
 {
-  "name":"com.github.rkaverin.commands.AbstractDirCommand",
+  "name":"com.github.rkaverin.console.AbstractDirCommand",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
 },
 {
-  "name":"com.github.rkaverin.commands.AbstractThreadedCommand",
+  "name":"com.github.rkaverin.console.AbstractThreadedCommand",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
 },
 {
-  "name":"com.github.rkaverin.commands.AddCommand",
+  "name":"com.github.rkaverin.console.AddCommand",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
 },
 {
-  "name":"com.github.rkaverin.commands.Command",
+  "name":"com.github.rkaverin.console.Command",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
 },
 {
-  "name":"com.github.rkaverin.commands.FindDuplicatesCommand",
+  "name":"com.github.rkaverin.console.FindDuplicatesCommand",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
 },
 {
-  "name":"com.github.rkaverin.commands.ListCommand",
+  "name":"com.github.rkaverin.console.ListCommand",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
 },
 {
-  "name":"com.github.rkaverin.commands.PurgeCommand",
+  "name":"com.github.rkaverin.console.PurgeCommand",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
 },
 {
-  "name":"com.github.rkaverin.commands.RemoveCommand",
+  "name":"com.github.rkaverin.console.RemoveCommand",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
 },
 {
-  "name":"com.github.rkaverin.commands.UpdateCommand",
+  "name":"com.github.rkaverin.console.UpdateCommand",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
 },
 {
   "name":"int",
   "allDeclaredFields":true
+},
+{
+  "name":"java.io.Console",
+  "methods":[{"name":"writer","parameterTypes":[] }]
+},
+{
+  "name":"java.lang.System",
+  "methods":[{"name":"console","parameterTypes":[] }]
 },
 {
   "name":"java.nio.file.Path",
