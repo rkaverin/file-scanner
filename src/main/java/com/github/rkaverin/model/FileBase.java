@@ -15,30 +15,15 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 public class FileBase implements Serializable {
-    private Map<Path, List<FileEntry>> map = new HashMap<>();
+    private Map<String, List<FileEntry>> map = new HashMap<>();
     private transient HashCalculator calculator;
     @Getter
     private transient boolean isModified = true;
 
+    @SuppressWarnings("unchecked") //Object to Map<String, List<FileEntry>>
     public void load(Path path) throws IOException, ClassNotFoundException {
         try (ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(Files.newInputStream(path)))) {
-            FileBase base = (FileBase) input.readObject();
-            this.map = base.map;
-//        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new GZIPInputStream(Files.newInputStream(path))))) {
-//            while (reader.ready()) {
-//                try {
-//                    Path dir = Path.of(reader.readLine());
-//                    List<FileEntry> entry = new ArrayList<>();
-//
-//                    int count = Integer.parseInt(reader.readLine());
-//                    for (int i = 0; i < count; i++) {
-//                        entry.add(new FileEntry(reader.readLine()));
-//                    }
-//
-//                    map.put(dir, entry);
-//                } catch (NullPointerException ignored) {
-//                }
-//            }
+            this.map = (Map<String, List<FileEntry>>) input.readObject();
             isModified = false;
         }
     }
@@ -52,27 +37,14 @@ public class FileBase implements Serializable {
         }
 
         try (ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(Files.newOutputStream(path)))) {
-
-            output.writeObject(this);
-
-//        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(Files.newOutputStream(path))))) {
-//            for (Map.Entry<Path, List<FileEntry>> entry : map.entrySet()) {
-//                writer.write(entry.getKey().toString());
-//                writer.newLine();
-//                writer.write(Integer.toString(entry.getValue().size()));
-//                writer.newLine();
-//                for (FileEntry fileEntry : entry.getValue()) {
-//                    writer.write(fileEntry.toString());
-//                    writer.newLine();
-//                }
-//            }
+            output.writeObject(this.map);
             isModified = false;
         }
     }
 
     public void add(Path dir, ExecutorService executor, Runnable progressBarCallback) throws InterruptedException, IOException {
         List<FileEntry> list = new ArrayList<>();
-        map.put(dir, list);
+        map.put(dir.toString(), list);
         calculator = new HashCalculator(executor);
 
         Files.walk(dir)
@@ -102,7 +74,7 @@ public class FileBase implements Serializable {
                     if (fileEntriesBySize.containsKey(entry.getSize())) {
                         calculator.add(entry);
                     } else {
-                        newFiles.add(entry.getPath());
+                        newFiles.add(Path.of(entry.getPath()));
                     }
                 });
 
@@ -114,17 +86,18 @@ public class FileBase implements Serializable {
                     List<Path> sameHashFiles = fileEntriesBySize.get(entry.getSize()).stream()
                             .filter(f -> f.isSameHash(entry))
                             .map(FileEntry::getPath)
+                            .map(Path::of)
                             .collect(toList());
                     if (sameHashFiles.isEmpty()) {
-                        newFiles.add(entry.getPath());
+                        newFiles.add(Path.of(entry.getPath()));
                     } else {
-                        duplicates.put(entry.getPath(), sameHashFiles);
+                        duplicates.put(Path.of(entry.getPath()), sameHashFiles);
                     }
                 });
     }
 
     public void update(Path dir, ExecutorService executor, Runnable progressBarCallback, boolean fullscan) throws IOException, InterruptedException {
-        List<FileEntry> list = new ArrayList<>(fullscan ? emptyList() : map.getOrDefault(dir, emptyList()));
+        List<FileEntry> list = new ArrayList<>(fullscan ? emptyList() : map.getOrDefault(dir.toString(), emptyList()));
 
         list.removeIf(FileEntry::isNotExists);
         list.removeIf(FileEntry::isSizeOrTimeChanged);
@@ -143,18 +116,19 @@ public class FileBase implements Serializable {
 
         list.addAll(calculator.getEntries());
 
-        map.put(dir, list);
+        map.put(dir.toString(), list);
         isModified = true;
     }
 
     public Collection<Path> list() {
         return map.keySet().stream()
                 .sorted()
+                .map(Path::of)
                 .collect(toList());
     }
 
     public void remove(Path path) {
-        map.remove(path);
+        map.remove(path.toString());
         isModified = true;
     }
 
@@ -165,7 +139,7 @@ public class FileBase implements Serializable {
     }
 
     public long getFilesCount(Path path) {
-        return map.getOrDefault(path, emptyList()).size();
+        return map.getOrDefault(path.toString(), emptyList()).size();
     }
 
     public long getTotalByteCount() {
@@ -176,7 +150,7 @@ public class FileBase implements Serializable {
     }
 
     public long getTotalByteCount(Path path) {
-        return map.getOrDefault(path, emptyList()).stream()
+        return map.getOrDefault(path.toString(), emptyList()).stream()
                 .mapToLong(FileEntry::getSize)
                 .sum();
     }
@@ -202,38 +176,8 @@ public class FileBase implements Serializable {
         isModified = true;
     }
 
-    private void writeObject(ObjectOutputStream stream) throws IOException {
-        stream.writeObject(map.size());
-        for (Map.Entry<Path, List<FileEntry>> entry : map.entrySet()
-        ) {
-            stream.writeObject(entry.getKey().toString());
-            stream.writeObject(entry.getValue());
-        }
-
+    public boolean isEqualBase(FileBase other) {
+        return this.map.equals(other.map);
     }
 
-    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
-        map = new HashMap<>();
-        int cnt = (Integer) stream.readObject();
-        while (cnt-- > 0) {
-            Path path = Path.of((String) stream.readObject());
-            //TODO: разобраться почему вылетает предупреждение и устранить его
-            //noinspection unchecked
-            List<FileEntry> list = (List<FileEntry>) stream.readObject();
-            map.put(path, list);
-        }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FileBase fileBase = (FileBase) o;
-        return Objects.equals(map, fileBase.map);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(map);
-    }
 }

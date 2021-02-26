@@ -7,6 +7,11 @@ import java.nio.file.Path;
 
 public class TestUtils {
     static final String TEST_SHA_1 = "5b00669c480d5cffbdfa8bdba99561160f2d1b77";
+    static final String ANOTHER_TEST_SHA_1 = "c423e794187f6c5b1d17066a23bdbaacbaf697fe";
+
+    public static void main(String[] args) throws IOException {
+        System.out.println(makeAnotherTestFile());
+    }
 
     static Path makeTestFile() throws IOException {
         Path result = Files.createTempFile("fscan", null);
@@ -17,6 +22,17 @@ public class TestUtils {
         }
         return result;
     }
+
+    static Path makeAnotherTestFile() throws IOException {
+        Path result = Files.createTempFile("fscan", null);
+        try (OutputStream output = Files.newOutputStream(result)) {
+            for (int i = 1024; i > 0; i--) {
+                output.write(i);
+            }
+        }
+        return result;
+    }
+
 
     static Path makeTestDir() throws IOException {
         Path result = Files.createTempDirectory("fscan-dir");

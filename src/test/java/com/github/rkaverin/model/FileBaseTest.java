@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,9 +39,29 @@ class FileBaseTest {
             try (ObjectInputStream input = new ObjectInputStream(new ByteArrayInputStream(buffer.toByteArray()))
             ) {
                 FileBase actual = (FileBase) input.readObject();
-                assertEquals(expected, actual);
+                assertTrue(actual.isEqualBase(expected));
             }
         }
+    }
+
+    @Test
+    void saveAndLoad() throws IOException, InterruptedException, ClassNotFoundException {
+        FileBase expected = new FileBase();
+        FileBase actual = new FileBase();
+
+        expected.add(makeTestDir(), executor, () -> {});
+        expected.add(makeTestDir(), executor, () -> {});
+        expected.add(makeTestDir(), executor, () -> {});
+
+        Path path = Files.createTempFile("fscan-base", null);
+        expected.save(path);
+
+        assertFalse(actual.isEqualBase(expected)); //базы разные
+
+        actual.load(path);
+        assertTrue(actual.isEqualBase(expected)); //базы эквивалентны
+
+
     }
 
 

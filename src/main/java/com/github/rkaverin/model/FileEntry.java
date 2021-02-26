@@ -2,9 +2,9 @@ package com.github.rkaverin.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.file.Files;
@@ -16,16 +16,63 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 
+@ToString
 @EqualsAndHashCode
 @Getter
 public class FileEntry implements Serializable {
     private static final String NO_HASH = "no hash calculated yet";
+    private static final BasicFileAttributes NO_ATTR = new BasicFileAttributes() {
+        @Override
+        public FileTime lastModifiedTime() {
+            return FileTime.fromMillis(0);
+        }
+
+        @Override
+        public FileTime lastAccessTime() {
+            return FileTime.fromMillis(0);
+        }
+
+        @Override
+        public FileTime creationTime() {
+            return FileTime.fromMillis(0);
+        }
+
+        @Override
+        public boolean isRegularFile() {
+            return false;
+        }
+
+        @Override
+        public boolean isDirectory() {
+            return false;
+        }
+
+        @Override
+        public boolean isSymbolicLink() {
+            return false;
+        }
+
+        @Override
+        public boolean isOther() {
+            return false;
+        }
+
+        @Override
+        public long size() {
+            return 0;
+        }
+
+        @Override
+        public Object fileKey() {
+            return null;
+        }
+    };
 
     private String hash;
-    private Path path;
-    private long size;
-    private FileTime creationTime;
-    private FileTime modificationTime;
+    private final String path;
+    private final long size;
+    private final Instant creationTime;
+    private final Instant modificationTime;
 
 
     public FileEntry(Path path) {
@@ -33,50 +80,31 @@ public class FileEntry implements Serializable {
     }
 
     public FileEntry(Path path, String hash) {
-        this.path = path;
+        BasicFileAttributes attributes = readAttributesOrEmpty(path);
+        this.path = path.toString();
         this.hash = hash;
+        this.creationTime = attributes.creationTime().toInstant();
+        this.modificationTime = attributes.lastModifiedTime().toInstant();
+        this.size = attributes.size();
+    }
 
+    private BasicFileAttributes readAttributesOrEmpty(Path path) {
         try {
-            BasicFileAttributes attributes = Files.readAttributes(path, BasicFileAttributes.class);
-            this.creationTime = attributes.creationTime();
-            this.modificationTime = attributes.lastModifiedTime();
-            this.size = Files.size(path);
+            return Files.readAttributes(path, BasicFileAttributes.class);
         } catch (IOException e) {
-            this.creationTime = FileTime.fromMillis(0);
-            this.modificationTime = FileTime.fromMillis(0);
-            this.size = 0;
+            return NO_ATTR;
         }
     }
 
-    //TODO: заменить сериализацию через строку на нормальную запись в объектный стрим
-    public FileEntry(String line) {
-        this(
-                Path.of(line.split("\t")[0]),
-                Long.parseLong(line.split("\t")[1]),
-                FileTime.fromMillis(Long.parseLong(line.split("\t")[2])),
-                FileTime.fromMillis(Long.parseLong(line.split("\t")[3])),
-                line.split("\t")[4]
-        );
-    }
-
-    private FileEntry(Path path, long size, FileTime creationTime, FileTime modificationTime, String hash) {
-        this.path = path;
-        this.size = size;
-        this.creationTime = creationTime;
-        this.modificationTime = modificationTime;
-        this.hash = hash;
-    }
-
     public void calcHash() {
-        hash = calcHash(path);
+        hash = calcHash(Path.of(path));
     }
 
     private static String calcHash(Path path) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             try (
-                    InputStream is = Files.newInputStream(path);
-                    DigestInputStream dis = new DigestInputStream(is, md);
+                    DigestInputStream dis = new DigestInputStream(Files.newInputStream(path), md);
                     OutputStream os = OutputStream.nullOutputStream()
             ) {
                 dis.transferTo(os);
@@ -100,7 +128,7 @@ public class FileEntry implements Serializable {
     }
 
     public boolean isSameHash(FileEntry other) {
-        return hash.equals(other.getHash()) && !hash.isEmpty() && !other.getHash().isEmpty();
+        return hash.equals(other.getHash()) && this.isDone() && other.isDone();
     }
 
     public boolean isSamePath(FileEntry entry) {
@@ -108,45 +136,13 @@ public class FileEntry implements Serializable {
     }
 
     public static boolean isNotExists(FileEntry entry) {
-        return !Files.exists(entry.getPath());
+        return !Files.exists(Path.of(entry.getPath()));
     }
-
 
     public static boolean isSizeOrTimeChanged(FileEntry entry) {
-        FileEntry onDisk = new FileEntry(entry.getPath());
+        FileEntry onDisk = new FileEntry(Path.of(entry.getPath()));
         return entry.getSize() != onDisk.getSize()
-                || entry.getCreationTime().toMillis() != onDisk.getCreationTime().toMillis()
-                || entry.getModificationTime().toMillis() != onDisk.getModificationTime().toMillis();
+                || entry.getCreationTime().toEpochMilli() != onDisk.getCreationTime().toEpochMilli()
+                || entry.getModificationTime().toEpochMilli() != onDisk.getModificationTime().toEpochMilli();
     }
-
-
-    private void writeObject(java.io.ObjectOutputStream stream) throws IOException {
-        stream.writeObject(hash);
-        stream.writeObject(path.toAbsolutePath().toString());
-        stream.writeObject(size);
-        stream.writeObject(creationTime.toInstant());
-        stream.writeObject(modificationTime.toInstant());
-    }
-
-    private void readObject(java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {
-        hash = (String) stream.readObject();
-        path = Path.of((String) stream.readObject());
-        size = (Long) stream.readObject();
-        creationTime = FileTime.from((Instant) stream.readObject());
-        modificationTime = FileTime.from((Instant) stream.readObject());
-    }
-
-
-    @Override
-    public String toString() {
-        return String.format(
-                "%s\t%d\t%d\t%d\t%s",
-                getPath().toString(),
-                getSize(),
-                getCreationTime().toMillis(),
-                getModificationTime().toMillis(),
-                getHash()
-        );
-    }
-
 }

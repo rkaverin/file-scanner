@@ -1,5 +1,18 @@
 {
   "resources":{
-  "includes":[]},
-  "bundles":[]
+  "includes":[
+    {"pattern":"\\Qapp.png\\E"}, 
+    {"pattern":"\\Qcom/sun/glass/utils/NativeLibLoader.class\\E"}, 
+    {"pattern":"\\Qcom/sun/javafx/scene/control/skin/modena/modena.bss\\E"}, 
+    {"pattern":"\\Qcom/sun/prism/es2/glsl/FillPgram_Color.frag\\E"}, 
+    {"pattern":"\\Qcom/sun/prism/es2/glsl/Solid_TextureRGB.frag\\E"}, 
+    {"pattern":"\\Qcom/sun/prism/es2/glsl/Texture_Color.frag\\E"}, 
+    {"pattern":"\\Qlibglass.so\\E"}, 
+    {"pattern":"\\Qlibglassgtk3.so\\E"}, 
+    {"pattern":"\\Qlibjavafx_font.so\\E"}, 
+    {"pattern":"\\Qlibjavafx_font_freetype.so\\E"}, 
+    {"pattern":"\\Qlibjavafx_font_pango.so\\E"}, 
+    {"pattern":"\\Qlibprism_es2.so\\E"}
+  ]},
+  "bundles":[{"name":"com.sun.javafx.tk.quantum.QuantumMessagesBundle"}]
 }
