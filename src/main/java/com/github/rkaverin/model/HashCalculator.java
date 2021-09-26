@@ -17,12 +17,12 @@ public class HashCalculator {
         this.executor = executor;
     }
 
-    public void add(FileEntry entry) {
-        entries.put(entry, null);
-    }
+//    public void add(FileEntry entry) {
+//        entries.put(entry, null);
+//    }
 
-    public Collection<? extends FileEntry> getEntries() {
-        return entries.keySet();
+    public void add(Collection<FileEntry> collection) {
+        collection.forEach(entry -> entries.put(entry, null));
     }
 
     public void startCalc() {
@@ -70,5 +70,9 @@ public class HashCalculator {
 
     public double getScanSpeed() {
         return getProcessedByteCount() * 1.0 / (1024 * 1024 * getScanTime());
+    }
+
+    public int getCount() {
+        return entries.size();
     }
 }

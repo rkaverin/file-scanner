@@ -33,6 +33,16 @@ public class TestUtils {
         return result;
     }
 
+    static Path makeRandomTestFile() throws IOException {
+        Path result = Files.createTempFile("fscan", null);
+        try (OutputStream output = Files.newOutputStream(result)) {
+            for (int i = 1024; i > 0; i--) {
+                output.write((int) (Math.random() * 256));
+            }
+        }
+        return result;
+    }
+
 
     static Path makeTestDir() throws IOException {
         Path result = Files.createTempDirectory("fscan-dir");
@@ -46,5 +56,9 @@ public class TestUtils {
             }
         }
         return result;
+    }
+
+    static Runnable noProgressBar() {
+        return () -> {};
     }
 }

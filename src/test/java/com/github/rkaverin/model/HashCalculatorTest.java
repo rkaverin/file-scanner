@@ -11,7 +11,8 @@ import java.util.concurrent.Executors;
 
 import static com.github.rkaverin.model.TestUtils.TEST_SHA_1;
 import static com.github.rkaverin.model.TestUtils.makeTestFile;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class HashCalculatorTest {
@@ -24,35 +25,37 @@ class HashCalculatorTest {
     }
 
     @Test
-    void addAndGetEntries() throws IOException {
+    void add() throws IOException {
         HashCalculator calculator = new HashCalculator(executor);
 
         List<FileEntry> list = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
             list.add(new FileEntry(makeTestFile()));
         }
-        list.forEach(calculator::add);
 
-        assertTrue(calculator.getEntries().containsAll(list));
-        assertTrue(list.containsAll(calculator.getEntries()));
+        assertEquals(0, calculator.getCount());
+        calculator.add(list);
+        assertEquals(1000, calculator.getCount());
     }
 
     @Test
     void calcAndAwait() throws IOException, InterruptedException {
         HashCalculator calculator = new HashCalculator(executor);
 
+        List<FileEntry> list = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
-            calculator.add(new FileEntry(makeTestFile()));
+            list.add(new FileEntry(makeTestFile()));
         }
 
+        calculator.add(list);
         calculator.startCalc();
-        calculator.awaitCalculation(() -> {});
+        calculator.awaitCalculation(() -> {
+        });
 
-        boolean allDone = calculator.getEntries().stream()
-                .allMatch(FileEntry::isDone);
+        boolean allDone = list.stream().allMatch(FileEntry::isDone);
         assertTrue(allDone);
 
-        boolean allHashEquals = calculator.getEntries().stream()
+        boolean allHashEquals = list.stream()
                 .allMatch(entry -> entry.getHash().equals(TEST_SHA_1));
         assertTrue(allHashEquals);
     }

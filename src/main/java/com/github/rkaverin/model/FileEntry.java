@@ -2,7 +2,7 @@ package com.github.rkaverin.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
+import lombok.NonNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,7 +16,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 
-@ToString
 @EqualsAndHashCode
 @Getter
 public class FileEntry implements Serializable {
@@ -75,11 +74,11 @@ public class FileEntry implements Serializable {
     private final Instant modificationTime;
 
 
-    public FileEntry(Path path) {
+    public FileEntry(@NonNull Path path) {
         this(path, NO_HASH);
     }
 
-    public FileEntry(Path path, String hash) {
+    public FileEntry(@NonNull Path path, @NonNull String hash) {
         BasicFileAttributes attributes = readAttributesOrEmpty(path);
         this.path = path.toString();
         this.hash = hash;
@@ -88,7 +87,7 @@ public class FileEntry implements Serializable {
         this.size = attributes.size();
     }
 
-    private BasicFileAttributes readAttributesOrEmpty(Path path) {
+    private BasicFileAttributes readAttributesOrEmpty(@NonNull Path path) {
         try {
             return Files.readAttributes(path, BasicFileAttributes.class);
         } catch (IOException e) {
@@ -100,7 +99,7 @@ public class FileEntry implements Serializable {
         hash = calcHash(Path.of(path));
     }
 
-    private static String calcHash(Path path) {
+    private static String calcHash(@NonNull Path path) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             try (
@@ -115,7 +114,7 @@ public class FileEntry implements Serializable {
         }
     }
 
-    private static String byteArrayToString(byte[] bytes) {
+    private static String byteArrayToString(@NonNull byte[] bytes) {
         StringBuilder result = new StringBuilder();
         for (byte aByte : bytes) {
             result.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
@@ -127,19 +126,19 @@ public class FileEntry implements Serializable {
         return !hash.equals(NO_HASH);
     }
 
-    public boolean isSameHash(FileEntry other) {
+    public boolean isSameHash(@NonNull FileEntry other) {
         return hash.equals(other.getHash()) && this.isDone() && other.isDone();
     }
 
-    public boolean isSamePath(FileEntry entry) {
+    public boolean isSamePath(@NonNull FileEntry entry) {
         return this.getPath().equals(entry.getPath());
     }
 
-    public static boolean isNotExists(FileEntry entry) {
+    public static boolean isNotExists(@NonNull FileEntry entry) {
         return !Files.exists(Path.of(entry.getPath()));
     }
 
-    public static boolean isSizeOrTimeChanged(FileEntry entry) {
+    public static boolean isSizeOrTimeChanged(@NonNull FileEntry entry) {
         FileEntry onDisk = new FileEntry(Path.of(entry.getPath()));
         return entry.getSize() != onDisk.getSize()
                 || entry.getCreationTime().toEpochMilli() != onDisk.getCreationTime().toEpochMilli()

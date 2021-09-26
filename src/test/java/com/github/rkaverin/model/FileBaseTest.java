@@ -8,11 +8,12 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.github.rkaverin.model.TestUtils.makeTestDir;
-import static com.github.rkaverin.model.TestUtils.makeTestFile;
+import static com.github.rkaverin.model.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileBaseTest {
@@ -27,9 +28,9 @@ class FileBaseTest {
     @Test
     void serialization() throws IOException, ClassNotFoundException, InterruptedException {
         FileBase expected = new FileBase();
-        expected.add(makeTestDir(), executor, () -> {});
-        expected.add(makeTestDir(), executor, () -> {});
-        expected.add(makeTestDir(), executor, () -> {});
+        expected.add(makeTestDir(), executor, noProgressBar());
+        expected.add(makeTestDir(), executor, noProgressBar());
+        expected.add(makeTestDir(), executor, noProgressBar());
 
         try (ByteArrayOutputStream buffer = new ByteArrayOutputStream();
              ObjectOutputStream output = new ObjectOutputStream(buffer)
@@ -49,9 +50,9 @@ class FileBaseTest {
         FileBase expected = new FileBase();
         FileBase actual = new FileBase();
 
-        expected.add(makeTestDir(), executor, () -> {});
-        expected.add(makeTestDir(), executor, () -> {});
-        expected.add(makeTestDir(), executor, () -> {});
+        expected.add(makeTestDir(), executor, noProgressBar());
+        expected.add(makeTestDir(), executor, noProgressBar());
+        expected.add(makeTestDir(), executor, noProgressBar());
 
         Path path = Files.createTempFile("fscan-base", null);
         expected.save(path);
@@ -60,9 +61,33 @@ class FileBaseTest {
 
         actual.load(path);
         assertTrue(actual.isEqualBase(expected)); //базы эквивалентны
-
-
     }
 
+    @Test
+    void add() throws IOException, InterruptedException {
+        FileBase base = new FileBase();
 
+        base.add(makeTestDir(), executor, noProgressBar());
+        base.add(makeTestDir(), executor, noProgressBar());
+        base.add(makeTestDir(), executor, noProgressBar());
+
+        assertEquals(1024 * 1000 * 3, base.getTotalByteCount());
+    }
+
+    @Test
+    void list() throws IOException, InterruptedException {
+        FileBase base = new FileBase();
+        List<Path> list = new ArrayList<>();
+        list.add(makeTestDir());
+        list.add(makeTestDir());
+        list.add(makeTestDir());
+
+        assertEquals(0, base.list().size());
+
+        for (Path path : list) {
+            base.add(path, executor, noProgressBar());
+        }
+        assertEquals(3, base.list().size());
+        assertTrue(base.list().containsAll(list));
+    }
 }

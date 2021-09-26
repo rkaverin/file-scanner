@@ -50,12 +50,11 @@ public class FileBase implements Serializable {
         Files.walk(dir)
                 .filter(Files::isRegularFile)
                 .map(FileEntry::new)
-                .forEach(calculator::add);
+                .forEach(list::add);
 
+        calculator.add(list);
         calculator.startCalc();
         calculator.awaitCalculation(progressBarCallback);
-
-        list.addAll(calculator.getEntries());
 
         isModified = true;
     }
@@ -67,21 +66,24 @@ public class FileBase implements Serializable {
 
         calculator = new HashCalculator(executor);
 
+        List<FileEntry> possibleDuplicates = new ArrayList<>();
+
         Files.walk(dir)
                 .filter(Files::isRegularFile)
                 .map(FileEntry::new)
                 .forEach(entry -> {
                     if (fileEntriesBySize.containsKey(entry.getSize())) {
-                        calculator.add(entry);
+                        possibleDuplicates.add(entry);
                     } else {
                         newFiles.add(Path.of(entry.getPath()));
                     }
                 });
 
+        calculator.add(possibleDuplicates);
         calculator.startCalc();
         calculator.awaitCalculation(progressBarCallback);
 
-        calculator.getEntries().parallelStream()
+        possibleDuplicates.parallelStream()
                 .forEach(entry -> {
                     List<Path> sameHashFiles = fileEntriesBySize.get(entry.getSize()).stream()
                             .filter(f -> f.isSameHash(entry))
@@ -104,17 +106,18 @@ public class FileBase implements Serializable {
 
         calculator = new HashCalculator(executor);
 
-        Files.walk(dir)
+        List<FileEntry> newFiles = Files.walk(dir)
                 .filter(Files::isRegularFile)
                 .map(FileEntry::new)
                 .parallel()
                 .filter(entry -> list.parallelStream().noneMatch(entry::isSamePath))
-                .forEach(calculator::add);
+                .collect(toList());
 
+        calculator.add(newFiles);
         calculator.startCalc();
         calculator.awaitCalculation(progressBarCallback);
 
-        list.addAll(calculator.getEntries());
+        list.addAll(newFiles);
 
         map.put(dir.toString(), list);
         isModified = true;

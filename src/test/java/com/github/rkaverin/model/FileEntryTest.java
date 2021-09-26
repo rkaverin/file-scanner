@@ -102,4 +102,13 @@ class FileEntryTest {
         Files.newBufferedWriter(path).write(31337);
         assertTrue(FileEntry.isSizeOrTimeChanged(entry)); //размер файла и modification time файл изменились
     }
+
+    @Test
+    void invalidPath() {
+        FileEntry entry = new FileEntry(Path.of(""));
+        assertFalse(entry.isDone());
+
+        entry.calcHash();
+        assertFalse(entry.isDone());
+    }
 }
