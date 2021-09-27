@@ -1,8 +1,9 @@
 package com.github.rkaverin.model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -13,7 +14,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.github.rkaverin.model.TestUtils.*;
+import static com.github.rkaverin.model.TestUtils.makeTestDir;
+import static com.github.rkaverin.model.TestUtils.noProgressBar;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileBaseTest {
@@ -43,6 +45,27 @@ class FileBaseTest {
                 assertTrue(actual.isEqualBase(expected));
             }
         }
+    }
+
+    @Test
+    void serializationByJackson() throws IOException, InterruptedException {
+        FileBase expected = new FileBase();
+        expected.add(makeTestDir(), executor, noProgressBar());
+        expected.add(makeTestDir(), executor, noProgressBar());
+        expected.add(makeTestDir(), executor, noProgressBar());
+
+        ObjectMapper mapper = new ObjectMapper()
+                .registerModule(new JavaTimeModule())
+                .enable(SerializationFeature.INDENT_OUTPUT);
+
+        String json = mapper
+                .writeValueAsString(expected);
+
+        FileBase actual = mapper
+                .readerFor(FileBase.class)
+                .readValue(json);
+
+        assertTrue(actual.isEqualBase(expected));
     }
 
     @Test

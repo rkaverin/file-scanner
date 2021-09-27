@@ -1,5 +1,11 @@
 package com.github.rkaverin.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Getter;
 
 import java.io.*;
@@ -14,7 +20,9 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
+@JsonIgnoreProperties({"totalByteCount", "modified", "eta", "progress", "scanSpeed", "scanTime", "filesCount"})
 public class FileBase implements Serializable {
+    @JsonProperty("map")
     private Map<String, List<FileEntry>> map = new HashMap<>();
     private transient HashCalculator calculator;
     @Getter
@@ -22,10 +30,21 @@ public class FileBase implements Serializable {
 
     @SuppressWarnings("unchecked") //Object to Map<String, List<FileEntry>>
     public void load(Path path) throws IOException, ClassNotFoundException {
-        try (ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(Files.newInputStream(path)))) {
-            this.map = (Map<String, List<FileEntry>>) input.readObject();
+//        try (ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(Files.newInputStream(path)))) {
+//            this.map = (Map<String, List<FileEntry>>) input.readObject();
+//            isModified = false;
+//        }
+
+        try (InputStream input = new GZIPInputStream(Files.newInputStream(path))) {
+            ObjectMapper mapper = new ObjectMapper()
+                    .registerModule(new JavaTimeModule())
+                    .enable(SerializationFeature.INDENT_OUTPUT);
+
+            this.map = mapper
+                    .readValue(input, new TypeReference<HashMap<String, List<FileEntry>>>() {});
             isModified = false;
         }
+
     }
 
     public void save(Path path) throws IOException {
@@ -36,8 +55,16 @@ public class FileBase implements Serializable {
             }
         }
 
-        try (ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(Files.newOutputStream(path)))) {
-            output.writeObject(this.map);
+//        try (ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(Files.newOutputStream(path)))) {
+//            output.writeObject(this.map);
+//            isModified = false;
+//        }
+        try (OutputStream output = new GZIPOutputStream(Files.newOutputStream(path))) {
+            ObjectMapper mapper = new ObjectMapper()
+                    .registerModule(new JavaTimeModule())
+                    .enable(SerializationFeature.INDENT_OUTPUT);
+
+            mapper.writeValue(output, this.map);
             isModified = false;
         }
     }
