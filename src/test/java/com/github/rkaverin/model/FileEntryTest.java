@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Instant;
 
 import static com.github.rkaverin.model.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -50,6 +51,17 @@ class FileEntryTest {
 
         assertEquals(expected, actual);
         assertNotEquals(another, actual);
+    }
+
+    @Test
+    void nonExistingFile() throws IOException {
+        FileEntry nonExistent = new FileEntry(Path.of("/proc/illegal"));
+        nonExistent.calcHash();
+
+        assertEquals(0, nonExistent.getSize());
+        assertEquals(Instant.ofEpochMilli(0), nonExistent.getCreationTime());
+        assertEquals(Instant.ofEpochMilli(0), nonExistent.getModificationTime());
+        assertTrue(FileEntry.isNotExists(nonExistent));
     }
 
     @Test
