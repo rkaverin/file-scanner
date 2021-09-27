@@ -1,5 +1,7 @@
 package com.github.rkaverin.model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -27,6 +29,27 @@ class FileEntryTest {
                 assertEquals(expected, actual);
             }
         }
+    }
+
+    @Test
+    void serializationByJackson() throws IOException {
+        FileEntry expected = new FileEntry(makeTestFile());
+        expected.calcHash();
+        FileEntry another = new FileEntry(makeAnotherTestFile());
+        another.calcHash();
+
+        ObjectMapper mapper = new ObjectMapper()
+                .registerModule(new JavaTimeModule());
+
+        String json = mapper
+                .writeValueAsString(expected);
+
+        FileEntry actual = mapper
+                .readerFor(FileEntry.class)
+                .readValue(json);
+
+        assertEquals(expected, actual);
+        assertNotEquals(another, actual);
     }
 
     @Test

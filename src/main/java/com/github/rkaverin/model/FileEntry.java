@@ -1,5 +1,7 @@
 package com.github.rkaverin.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
@@ -16,6 +18,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 
+@JsonIgnoreProperties("done")
 @EqualsAndHashCode
 @Getter
 public class FileEntry implements Serializable {
@@ -87,6 +90,20 @@ public class FileEntry implements Serializable {
         this.size = attributes.size();
     }
 
+    private FileEntry(
+            @JsonProperty("hash") @NonNull String hash,
+            @JsonProperty("path") @NonNull String path,
+            @JsonProperty("size") long size,
+            @JsonProperty("creationTime") @NonNull Instant creationTime,
+            @JsonProperty("modificationTime") @NonNull Instant modificationTime
+    ) {
+        this.hash = hash;
+        this.path = path;
+        this.size = size;
+        this.creationTime = creationTime;
+        this.modificationTime = modificationTime;
+    }
+
     private BasicFileAttributes readAttributesOrEmpty(@NonNull Path path) {
         try {
             return Files.readAttributes(path, BasicFileAttributes.class);
@@ -114,7 +131,7 @@ public class FileEntry implements Serializable {
         }
     }
 
-    private static String byteArrayToString(@NonNull byte[] bytes) {
+    private static String byteArrayToString(byte[] bytes) {
         StringBuilder result = new StringBuilder();
         for (byte aByte : bytes) {
             result.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
